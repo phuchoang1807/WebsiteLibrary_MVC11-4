@@ -1,0 +1,77 @@
+﻿@model List<WebsiteLibrary.Models.Entities.LoanRequest>
+@{
+    ViewBag.Title = "Lịch sử yêu cầu mượn";
+    Layout = "~/Views/Shared/_LayoutReader.cshtml";
+}
+
+<div class="hero-wrap hero-bread" style="background-image: url('/images/home.jpg');">
+    <div class="container">
+        <div class="row no-gutters slider-text align-items-center justify-content-center">
+            <div class="col-md-9 ftco-animate text-center">
+                <p class="breadcrumbs"><span class="mr-2"><a href="index.html">Lịch sử</a></span> <span>mượn sách</span></p>
+                <h1 class="mb-0 bread">Lịch sử yêu cầu mượn sách</h1>
+            </div>
+        </div>
+    </div>
+</div>
+
+<section class="ftco-section ftco-cart">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12 ftco-animate">
+                <div class="cart-list">
+                    <table class="table">
+                        <thead class="thead-primary">
+                            <tr class="text-center">
+                                <th>Ngày yêu cầu</th>
+                                <th>Trạng thái</th>
+                                <th>Chức năng</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @if (Model != null && Model.Any())
+                            {
+                                foreach (var request in Model)
+                                {
+                                    <tr class="text-center">
+                                        <td>@request.RequestDate.ToString("dd/MM/yyyy")</td>
+                                        <td>@request.Status</td>
+                                        <td>
+                                            <button class="btn btn-primary btn-view-details" data-request-id="@request.RequestID">Xem chi tiết</button>
+                                        </td>
+                                    </tr>
+                                }
+                            }
+                            else
+                            {
+                                <tr>
+                                    <td colspan="3" class="text-center">Bạn chưa có lịch sử yêu cầu mượn sách.</td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+
+                    <!-- Phân trang -->
+                    @if (ViewBag.TotalPages > 1)
+                    {
+                        <div class="pagination">
+                            <a href="@Url.Action("History", "Reader", new { page = ViewBag.CurrentPage - 1 })"
+                               class="btn btn-outline-primary @(ViewBag.CurrentPage == 1 ? "disabled" : "")">
+                                Trước
+                            </a>
+                            <span>Trang @ViewBag.CurrentPage / @ViewBag.TotalPages</span>
+                            <a href="@Url.Action("History", "Reader", new { page = ViewBag.CurrentPage + 1 })"
+                               class="btn btn-outline-primary @(ViewBag.CurrentPage == ViewBag.TotalPages ? "disabled" : "")">
+                                Sau
+                            </a>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+@section Scripts {
+    <script src="~/js/history.js"></script>
+}

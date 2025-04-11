@@ -1,0 +1,152 @@
+﻿@{
+    ViewBag.Title = "Quản lý Sách";
+    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+}
+
+<link rel="stylesheet" href="~/css/admin-book.css" />
+
+
+    <div class="main-header">
+        <h1>Quản lý sách</h1>
+        <button class="btn" onclick="showAddBookPopup()">
+            <i class="fas fa-plus"></i> Thêm sách
+        </button>
+    </div>
+
+    <div class="search-section">
+        <div class="search-container">
+            <div class="search-wrapper">
+                <input type="text" id="search-input" placeholder="Tìm kiếm theo mã đầu sách hoặc tiêu đề..." oninput="searchBooks()">
+                <span class="search-icon" onclick="searchBooks()"><i class="fas fa-search"></i></span>
+                <span class="clear-search" id="clear-search" onclick="clearSearch()"><i class="fas fa-times"></i></span>
+            </div>
+        </div>
+    </div>
+
+    <table id="book-list">
+        <thead>
+            <tr>
+                <th>Ảnh bìa</th>
+                <th>Mã đầu sách</th>
+                <th>Tiêu đề đầu sách</th>
+                <th>Nhà xuất bản</th>
+                <th>Tác giả</th>
+                <th>Số trang</th>
+                <th>Số lượng</th>
+                <th>Năm xuất bản</th>
+                <th>Thể loại</th>
+                <th>Thao tác</th>
+            </tr>
+        </thead>
+        <tbody>
+            <!-- Dữ liệu sẽ được thêm động bằng JavaScript -->
+        </tbody>
+    </table>
+
+    <!-- Popup thêm sách -->
+    <div id="add-book-popup" class="modal" style="display:none;">
+        <div class="modal-content">
+            <span class="close-button" onclick="closeModal('add-book-popup')">×</span>
+            <h2>Thêm sách</h2>
+            <div class="form-group">
+                <label>Mã đầu sách <span class="required">*</span>:</label>
+                <input type="text" id="add-book-id" required> <!-- Bỏ readonly để người dùng tự nhập -->
+            </div>
+            <div class="form-group">
+                <label>Tiêu đề đầu sách <span class="required">*</span>:</label>
+                <input type="text" id="add-book-title" required>
+            </div>
+            <div class="form-group">
+                <label>Nhà xuất bản <span class="required">*</span>:</label>
+                <input type="text" id="add-book-publisher" required>
+            </div>
+            <div class="form-group">
+                <label>Tác giả <span class="required">*</span>:</label>
+                <input type="text" id="add-book-author" required>
+            </div>
+            <div class="form-group">
+                <label>Số trang <span class="required">*</span>:</label>
+                <input type="number" id="add-book-pages" min="1" required>
+            </div>
+            <div class="form-group">
+                <label>Năm xuất bản <span class="required">*</span>:</label>
+                <input type="number" id="add-book-year" min="1900" max="2025" required>
+            </div>
+            <div class="form-group">
+                <label>Thể loại <span class="required">*</span>:</label>
+                <select id="add-book-category" required>
+                    <!-- Bỏ onchange vì không còn tự động sinh mã -->
+                    <option value="">Chọn thể loại</option>
+                    <option value="van-hoc">Tài liệu học tập</option>
+                    <option value="khoa-hoc">Tài liệu lịch sử</option>
+                    <option value="lich-su">Sách phát triển bản thân</option>
+                    <option value="tam-ly">Tiểu thuyết</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label>Ảnh bìa sách:</label>
+                <input type="file" id="add-book-image" accept="image/*">
+                <div class="image-preview" id="book-image-preview" style="display: none; margin-top: 10px;">
+                    <img id="preview-image" src="#" alt="Preview" style="max-width: 200px; max-height: 200px;">
+                </div>
+            </div>
+            <div class="modal-actions">
+                <button class="btn btn-save" onclick="addBook()">
+                    <i class="fas fa-save"></i> Lưu
+                </button>
+                <button class="btn btn-cancel" onclick="closeModal('add-book-popup')">
+                    <i class="fas fa-times"></i> Hủy
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Popup xác nhận xóa sách -->
+    <div id="delete-book-popup" class="modal" style="display:none;">
+        <div class="modal-content">
+            <span class="close-button" onclick="closeModal('delete-book-popup')">×</span>
+            <h2>Xác nhận xóa sách</h2>
+            <p>Bạn có chắc chắn muốn xóa sách này?</p>
+            <div class="modal-actions">
+                <button class="btn btn-confirm" onclick="deleteBook()">
+                    <i class="fas fa-check"></i> Xác nhận
+                </button>
+                <button class="btn btn-cancel" onclick="closeModal('delete-book-popup')">
+                    <i class="fas fa-times"></i> Hủy
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal for Chi tiết Bản sao Sách -->
+    <div id="book-copy-details-modal" class="modal" style="display:none;">
+        <div class="modal-content">
+            <span class="close-button" onclick="closeModal('book-copy-details-modal')">×</span>
+            <h2>Chi tiết Bản sao Sách</h2>
+            <table id="book-copy-details-list">
+                <thead>
+                    <tr>
+                        <th>Mã bản sao sách</th>
+                        <th>Mã đầu sách</th>
+                        <th>Tình trạng</th>
+                        <th>Ngày nhập</th>
+                    </tr>
+                </thead>
+                <tbody id="book-copy-details-tbody">
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- Popup thông báo tùy chỉnh -->
+    <div id="custom-alert-popup" class="modal" style="display:none;">
+        <div class="modal-content">
+            <p id="custom-alert-message"></p>
+            <button class="btn btn-ok" onclick="closeCustomAlert()">OK</button>
+        </div>
+    </div>
+
+
+@section Scripts {
+    <script src="~/js/admin-book.js"></script>
+}

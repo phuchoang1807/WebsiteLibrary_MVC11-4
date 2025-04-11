@@ -1,0 +1,152 @@
+body {
+    background: linear-gradient(
+        112.68deg,
+        #2BBCFF 25%,
+        #999999 100%
+      );
+    background-size: cover;
+    background-position:center;
+}
+a{
+    color: #000000;
+    font-size: 17px;
+    text-decoration: none;
+}
+a:hover{
+    color: green;
+}
+#wrapper{
+    min-height: 97.5vh; /*độ cao tối thiểu bằng độ cao của màn hình*/ 
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.title-head{
+    font-size: 20px;
+    display: flex;
+    justify-content: center;   
+    
+}
+.title-head svg{
+    padding-right: 12px;
+}
+
+#form-login{
+    width: 100%;
+    max-width: 300px;
+    background: rgba(226, 226, 211, 0.8);
+    flex-grow: 1;
+    padding: 25px 25px 30px;
+    box-shadow: 0px 0px 20px 3px rgba(241, 241, 239, 0.8);
+    border-radius: 8px;
+    margin: 15px;
+}
+
+/* Responsive styles */
+@media screen and (max-width: 480px) {
+    #form-login {
+        margin: 10px;
+        padding: 20px 15px;
+    }
+
+    .form-input::placeholder {
+        font-size: 14px;
+    }
+
+    .form-submit {
+        width: 50%;
+        font-size: 14px;
+    }
+
+    .link {
+        font-size: 15px;
+    }
+}
+
+@media screen and (max-width: 320px) {
+    #form-login {
+        margin: 5px;
+        padding: 15px 10px;
+    }
+
+    .title-head {
+        font-size: 18px;
+    }
+
+    .form-input {
+        font-size: 15px;
+    }
+
+    .form-submit {
+        width: 60%;
+    }
+}
+
+.form-heading{
+    font-size: 25px;
+    color: #000000;
+    text-align: left;
+    margin-bottom: 30px;
+}
+
+.form-group{
+    border-bottom: 1px solid #000000;
+    margin-top: 15px;
+    margin-bottom: 20px;
+    display: flex;
+
+}
+
+.form-group svg{
+    color: aliceblue;
+    padding-top: 5px;
+    padding-right: 10px;
+}
+
+.form-input{
+    background: transparent;
+    border: 0;
+    outline: 0;
+    color: #000000;
+    flex-grow: 1;
+    font-size: 17px;
+}
+
+.form-input::placeholder{
+    color: #0a0a0a;
+    font-size: 17px;
+}
+
+.form-submit{
+    background: rgb(54, 180, 230);
+    border: 3px solid #000000;
+    color: #030303;
+    width: 35%;
+    text-transform: uppercase;
+    padding: 6px 10px;
+    transition: 0.25s ease-in-out;
+    border-radius: 8px;
+    align-items: center;
+    font-weight: bold;
+    margin: auto;
+    display: flex;
+    margin-top: 17px;
+}
+.form-submit:hover{
+    border: 3px solid #fafafa;
+    cursor: pointer;
+}
+.under{
+    display: flex;
+}
+.link{
+    text-align: center;
+    font-size: 17px;
+    margin-top: 20px;
+}
+.link a:hover{
+    color: green;
+}
+.link a{
+    color: #1353a7;
+}

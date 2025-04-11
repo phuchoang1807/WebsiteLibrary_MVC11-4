@@ -1,0 +1,222 @@
+﻿@model WebsiteLibrary.Models.ViewModels.StatsViewModel
+@{
+    ViewBag.Title = "Thống kê";
+    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+}
+
+<h1>Thống kê</h1>
+<div class="stats">
+    <div class="card">
+        <h3>Hoạt động tháng này</h3>
+        <div>Lượt mượn sách: <span id="monthly-borrows">@Model.MonthlyBorrows</span></div>
+        <div>Lượt trả sách: <span id="monthly-returns">@Model.MonthlyReturns</span></div>
+    </div>
+    <div class="card">
+        <h3>Tình trạng sách</h3>
+        <div>Tổng số sách: <span id="total-books">@Model.TotalBooks</span></div>
+        <div>Đang cho mượn: <span id="borrowed-books">@Model.BorrowedBooks</span></div>
+    </div>
+    <div class="card">
+        <h3>Hoạt động trả sách</h3>
+        <div>Tổng phiếu trả đã xử lý: <span id="total-returns">@Model.TotalReturns</span></div>
+        <div>Tổng sách quá hạn trả: <span id="overdue-books">@Model.OverdueBooks</span></div>
+    </div>
+</div>
+
+<section class="chart-section">
+    <h2>Thống kê lượt mượn/lượt trả sách</h2>
+    <canvas id="borrowReturnChart" width="450" height="225" style="display: block; box-sizing: border-box; height: 150px; width: 300px;"></canvas>
+
+    <!-- Thêm container cho biểu đồ phụ -->
+    <div class="charts-container" style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-top: 20px;">
+        <div>
+            <h3>Thể loại sách được mượn nhiều</h3>
+            <canvas id="popularCategoriesChart" width="150" height="75" style="display: block; box-sizing: border-box; height: 50px; width: 100px;"></canvas>
+        </div>
+        <div>
+            <h3>Thống kê sách theo thể loại</h3>
+            <canvas id="bookChart" width="450" height="225" style="display: block; box-sizing: border-box; height: 150px; width: 300px;"></canvas>
+        </div>
+    </div>
+</section>
+
+<h2>Danh sách phiếu cần bồi thường</h2>
+<table id="stats-detail">
+    <thead>
+        <tr>
+            <th>Mã phiếu mượn</th>
+            <th>Tên độc giả</th>
+            <th>Số điện thoại</th>
+            <th>Số lượng sách hỏng/mất</th>
+            <th>Số tiền cần bồi thường</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var compensation in Model.Compensations)
+        {
+            <tr>
+                <td>@compensation.BorrowingSlipId</td>
+                <td>@compensation.ReaderName</td>
+                <td>@compensation.PhoneNumber</td>
+                <td>@compensation.DamagedBooks hỏng / @compensation.LostBooks mất</td>
+                <td>@compensation.CompensationAmount.ToString("N0") VNĐ</td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+@section Styles {
+    <style>
+        .chart-section {
+            margin: 20px 0; /* Khoảng cách trên dưới */
+            padding: 20px; /* Khoảng cách bên trong */
+            background-color: #f9f9f9; /* Nền nhẹ để phân biệt */
+            border-radius: 8px; /* Bo góc */
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Đổ bóng nhẹ */
+        }
+
+            .chart-section canvas {
+                margin: 0 auto; /* Căn giữa biểu đồ */
+            }
+
+        .charts-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin-top: 20px;
+        }
+    </style>
+}
+
+@section Scripts {
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+        // Dữ liệu mẫu cho các biểu đồ
+        const monthLabels = ['T1', 'T2', 'T3', 'T4', 'T5', 'T6', 'T7', 'T8', 'T9', 'T10', 'T11', 'T12'];
+
+        // Biểu đồ đường: Thống kê lượt mượn/lượt trả sách
+        const borrowReturnCtx = document.getElementById('borrowReturnChart').getContext('2d');
+        new Chart(borrowReturnCtx, {
+            type: 'line',
+            data: {
+                labels: monthLabels,
+                datasets: [
+                    {
+                        label: 'Số lượt mượn sách',
+                        data: @Html.Raw(Json.Serialize(Model.BorrowData)),
+                        borderColor: '#2DA645',
+                        backgroundColor: 'rgba(45, 166, 69, 0.1)',
+                        tension: 0.3,
+                        fill: true
+                    },
+                    {
+                        label: 'Số lượt trả sách',
+                        data: @Html.Raw(Json.Serialize(Model.ReturnData)),
+                        borderColor: '#007bff',
+                        backgroundColor: 'rgba(0, 123, 255, 0.1)',
+                        tension: 0.3,
+                        fill: true
+                    }
+                ]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    title: {
+                        display: true,
+                        text: 'Thống kê mượn/trả sách theo tháng'
+                    }
+                },
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        title: {
+                            display: true,
+                            text: 'Số lượt'
+                        }
+                    },
+                    x: {
+                        title: {
+                            display: true,
+                            text: 'Tháng'
+                        }
+                    }
+                }
+            }
+        });
+
+        // Biểu đồ cột: Thống kê sách theo thể loại
+        const bookChartCtx = document.getElementById('bookChart').getContext('2d');
+        new Chart(bookChartCtx, {
+            type: 'bar',
+            data: {
+                labels: @Html.Raw(Json.Serialize(Model.BooksByCategory.Keys)),
+                datasets: [{
+                    label: 'Số lượng sách',
+                    data: @Html.Raw(Json.Serialize(Model.BooksByCategory.Values)),
+                    backgroundColor: [
+                        '#FF6384',
+                        '#36A2EB',
+                        '#FFCE56',
+                        '#4BC0C0'
+                    ]
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    title: {
+                        display: true,
+                        text: 'Thống kê sách theo thể loại'
+                    }
+                },
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        max: 100,
+                        title: {
+                            display: true,
+                            text: 'Số lượng sách'
+                        }
+                    },
+                    x: {
+                        title: {
+                            display: true,
+                            text: 'Thể loại'
+                        }
+                    }
+                }
+            }
+        });
+
+        // Biểu đồ tròn: Thể loại sách được mượn nhiều
+        const categoryCtx = document.getElementById('popularCategoriesChart').getContext('2d');
+        new Chart(categoryCtx, {
+            type: 'pie',
+            data: {
+                labels: @Html.Raw(Json.Serialize(Model.BorrowedBooksByCategory.Keys)),
+                datasets: [{
+                    data: @Html.Raw(Json.Serialize(Model.BorrowedBooksByCategory.Values)),
+                    backgroundColor: [
+                        '#FF6384',
+                        '#36A2EB',
+                        '#FFCE56',
+                        '#4BC0C0'
+                    ]
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: {
+                        position: 'right'
+                    },
+                    title: {
+                        display: true,
+                        text: 'Tỷ lệ thể loại sách được mượn nhiều (%)'
+                    }
+                }
+            }
+        });
+    </script>
+}

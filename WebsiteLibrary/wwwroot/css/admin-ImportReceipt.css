@@ -1,0 +1,496 @@
+/* File: css/admin-copybook.css */
+
+/* Thanh tìm kiếm */
+.search-section {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 20px;
+}
+
+.search-container {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+  max-width: 500px;
+}
+
+.search-wrapper {
+  position: relative;
+  width: 100%;
+}
+
+.search-container input {
+  width: 100%;
+  padding: 10px 40px 10px 40px;
+  border: 1px solid #ddd;
+  border-radius: 25px;
+  outline: none;
+  font-size: 16px;
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.search-container input:focus {
+  border-color: #007bff;
+  box-shadow: 0 0 5px rgba(0, 123, 255, 0.3);
+}
+
+.search-icon {
+  position: absolute;
+  left: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 16px;
+  color: #6c757d;
+  cursor: pointer;
+  transition: color 0.3s ease;
+}
+
+.search-icon:hover {
+  color: #007bff;
+}
+
+.clear-search {
+  position: absolute;
+  right: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 16px;
+  color: #6c757d;
+  cursor: pointer;
+  display: none;
+  transition: color 0.3s ease;
+}
+
+.clear-search:hover {
+  color: #dc3545;
+}
+
+/* Table styles */
+#book-copy-list {
+  margin-top: 20px;
+}
+
+#book-copy-list th,
+#book-copy-list td {
+  padding: 10px;
+  border: 1px solid #ddd;
+  text-align: left;
+}
+
+#book-copy-list th {
+  background-color: #f8f9fa;
+  color: #2c88a6;
+  font-weight: 600;
+}
+
+#book-copy-list tbody tr:hover {
+  background-color: #f1f1f1;
+}
+
+/* Button styles in table */
+#book-copy-list td .btn {
+  padding: 8px 12px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.1s ease;
+  margin-right: 5px;
+}
+
+#book-copy-list td .btn:hover {
+  transform: translateY(-2px);
+}
+
+#book-copy-list td .btn:active {
+  transform: translateY(0);
+}
+
+/* Button styles for "Xem chi tiết" */
+#book-copy-list td .btn {
+  background-color: #17a2b8;
+  color: white;
+}
+
+#book-copy-list td .btn:hover {
+  background-color: #138496;
+}
+
+/* Styles cho modal */
+.modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 1000;
+  display: none;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.modal.show {
+  display: block;
+  opacity: 1;
+}
+
+.modal-content {
+  position: relative;
+  background-color: white;
+  margin: 5% auto;
+  padding: 20px;
+  width: 80%;
+  max-width: 600px;
+  border-radius: 5px;
+  max-height: 80vh;
+  overflow-y: auto;
+  transform: scale(0.9);
+  transition: transform 0.3s ease;
+}
+
+.modal.show .modal-content {
+  transform: scale(1);
+}
+
+.close-button {
+  position: absolute;
+  right: 10px;
+  top: 10px;
+  font-size: 24px;
+  cursor: pointer;
+  transition: color 0.3s ease;
+}
+
+.close-button:hover {
+  color: #dc3545;
+}
+
+.modal-actions {
+  margin-top: 20px;
+  text-align: right;
+}
+
+.modal-actions .btn {
+  margin-left: 10px;
+}
+
+.form-group {
+  margin-bottom: 15px;
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: 5px;
+  color: #2c88a6;
+  font-weight: 600;
+}
+
+.form-group input,
+.form-group select,
+.form-group textarea {
+  width: 100%;
+  padding: 8px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.form-group textarea {
+  min-height: 100px;
+  resize: vertical;
+}
+
+.form-group input[readonly] {
+  background-color: #f0f0f0;
+  cursor: not-allowed;
+}
+
+.required {
+  color: #dc3545;
+  margin-left: 4px;
+}
+
+/* Styles cho danh sách đầu sách trong popup "Thêm phiếu nhập" */
+.book-entry {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 10px;
+  border: 1px solid #ddd;
+  padding: 10px;
+  border-radius: 4px;
+}
+
+.book-entry .form-group {
+  flex: 1;
+  margin-bottom: 0;
+}
+
+.book-entry .btn-delete {
+  background-color: #dc3545;
+  color: white;
+  padding: 8px;
+  border-radius: 50%;
+  width: 30px;
+  height: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.book-entry .btn-delete:hover {
+  background-color: #c82333;
+}
+
+.btn-add-book {
+  background-color: #28a745;
+  color: white;
+  margin-top: 10px;
+}
+
+.btn-add-book:hover {
+  background-color: #218838;
+}
+
+/* Styles cho bảng danh sách đầu sách trong popup "Chi tiết phiếu nhập" */
+.book-detail-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 10px;
+}
+
+.book-detail-table th,
+.book-detail-table td {
+  border: 1px solid #ddd;
+  padding: 8px;
+  text-align: left;
+}
+
+.book-detail-table th {
+  background-color: #f8f9fa;
+  color: #2c88a6;
+  font-weight: 600;
+}
+
+.book-detail-table tbody tr:hover {
+  background-color: #f1f1f1;
+}
+
+/* Popup thông báo tùy chỉnh */
+.custom-alert {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 2000;
+  display: none;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.custom-alert.show {
+  display: block;
+  opacity: 1;
+}
+
+.custom-alert-content {
+  position: absolute;
+  top: 20%;
+  left: 50%;
+  transform: translateX(-50%);
+  background-color: #1a1a1a;
+  color: white;
+  padding: 20px;
+  border-radius: 10px;
+  width: 300px;
+  text-align: center;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+}
+
+.custom-alert-content p {
+  margin: 0 0 20px 0;
+  font-size: 16px;
+}
+
+.btn-ok {
+  background-color: #e6f0fa;
+  color: #007bff;
+  border: 1px solid #007bff;
+  border-radius: 20px;
+  padding: 8px 20px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.btn-ok:hover {
+  background-color: #d0e0f5;
+}
+
+/* General button styles */
+.btn {
+  padding: 8px 12px;
+  background: #2c88a6;
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.1s ease;
+}
+
+.btn:hover {
+  background: #1f7e32;
+  transform: translateY(-2px);
+}
+
+.btn:active {
+  transform: translateY(0);
+}
+
+.btn i {
+  margin-right: 5px;
+}
+
+.btn-confirm {
+  background-color: #28a745;
+  color: white;
+}
+
+.btn-cancel {
+  background-color: #6c757d;
+  color: white;
+}
+
+.btn-save {
+  background-color: #007bff;
+  color: white;
+}
+
+/* Style cho hàng "Trống" */
+.empty-row {
+  text-align: center;
+  color: #6c757d;
+  font-style: italic;
+}
+
+.empty-row td {
+  padding: 20px;
+  border: none;
+  text-align: center !important;
+  width: 100%;
+}
+
+/* Details container (Chi tiết phiếu nhập) */
+.modal-content p {
+  margin-bottom: 10px;
+  font-size: 14px;
+}
+
+.modal-content p strong {
+  color: #2c88a6;
+}
+
+/* Responsive design */
+@media screen and (max-width: 1024px) {
+  #book-copy-list {
+    font-size: 14px;
+  }
+
+  #book-copy-list td .btn {
+    padding: 4px 8px;
+    font-size: 12px;
+  }
+
+  .book-detail-table {
+    font-size: 14px;
+  }
+}
+
+@media screen and (max-width: 768px) {
+  .main-header {
+    text-align: center;
+  }
+
+  .search-box {
+    flex-direction: column;
+    gap: 15px;
+  }
+
+  .search-box input {
+    width: 100%;
+  }
+
+  #book-copy-list thead {
+    display: none;
+  }
+
+  #book-copy-list tbody tr {
+    display: block;
+    margin-bottom: 15px;
+    border: 1px solid #e9ecef;
+    border-radius: 4px;
+  }
+
+  #book-copy-list tbody td {
+    display: grid;
+    grid-template-columns: 35% 65%;
+    padding: 8px 15px;
+    border: none;
+    border-bottom: 1px solid #e9ecef;
+  }
+
+  #book-copy-list tbody td::before {
+    content: attr(data-label);
+    font-weight: 600;
+    color: #2c88a6;
+  }
+
+  /* Căn giữa chữ "Trống" trong responsive mode */
+  .empty-row td {
+    display: block !important;
+    grid-template-columns: none !important;
+    text-align: center !important;
+  }
+
+  /* Responsive cho danh sách đầu sách */
+  .book-entry {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .book-entry .form-group {
+    width: 100%;
+  }
+
+  .book-entry .btn-delete {
+    align-self: flex-end;
+  }
+
+  /* Responsive cho bảng chi tiết đầu sách */
+  .book-detail-table thead {
+    display: none;
+  }
+
+  .book-detail-table tbody tr {
+    display: block;
+    margin-bottom: 10px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+  }
+
+  .book-detail-table tbody td {
+    display: block;
+    text-align: left;
+    padding: 5px 10px;
+    border: none;
+    border-bottom: 1px solid #ddd;
+  }
+
+  .book-detail-table tbody td::before {
+    content: attr(data-label);
+    font-weight: 600;
+    color: #2c88a6;
+    display: inline-block;
+    width: 100px;
+  }
+}

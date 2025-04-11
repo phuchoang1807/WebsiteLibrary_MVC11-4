@@ -1,0 +1,21 @@
+﻿@{
+    if (User.Identity.IsAuthenticated)
+    {
+        if (User.IsInRole("Reader"))
+        {
+            Layout = "~/Views/Shared/_LayoutReader.cshtml";
+        }
+        else if (User.IsInRole("Librarian"))
+        {
+            Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+        }
+        else
+        {
+            Layout = "~/Views/Shared/_LayoutHome.cshtml"; // Layout cho Home
+        }
+    }
+    else
+    {
+        Layout = "~/Views/Shared/_LayoutHome.cshtml"; // Layout cho người chưa đăng nhập
+    }
+}

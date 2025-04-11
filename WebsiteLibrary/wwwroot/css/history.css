@@ -1,0 +1,126 @@
+/* Modal styles từ code của bạn */
+.modal {
+    position: fixed;
+    z-index: 1000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    overflow: auto;
+    opacity: 0;
+    transition: opacity 0.3s ease-in-out;
+}
+
+.modal.show {
+    opacity: 1;
+}
+
+.modal-content {
+    background-color: #fff;
+    margin: 10% auto;
+    padding: 20px;
+    border: 1px solid #888;
+    width: 80%;
+    max-width: 600px;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    position: relative;
+    transform: scale(0.8);
+    opacity: 0;
+    transition: transform 0.3s ease-in-out, opacity 0.3s ease-in-out;
+}
+
+.modal.show .modal-content {
+    transform: scale(1);
+    opacity: 1;
+}
+
+.close-button {
+    position: absolute;
+    top: 10px;
+    right: 15px;
+    color: #aaa;
+    font-size: 24px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: color 0.3s ease;
+}
+
+.close-button:hover,
+.close-button:focus {
+    color: #000;
+}
+
+.modal-content h2 {
+    font-size: 18px;
+    color: #333;
+    margin-bottom: 15px;
+    text-align: center;
+}
+
+/* Styles cho bảng chi tiết */
+.book-detail-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 10px;
+}
+
+.book-detail-table th,
+.book-detail-table td {
+    border: 1px solid #ddd;
+    padding: 8px;
+    text-align: left;
+}
+
+.book-detail-table th {
+    background-color: #f8f9fa;
+    color: #333;
+    font-weight: 600;
+}
+
+.book-detail-table tbody tr:hover {
+    background-color: #f1f1f1;
+}
+
+/* Nút trong modal */
+.modal-actions {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    margin-top: 20px;
+}
+
+.btn-cancel-request {
+    background-color: #dc3545;
+    color: white;
+    padding: 8px 12px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.btn-cancel-request:hover {
+    background-color: #c82333;
+}
+.pagination {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 20px;
+}
+
+    .pagination a {
+        margin: 0 10px;
+        text-decoration: none;
+    }
+
+    .pagination .disabled {
+        pointer-events: none;
+        opacity: 0.5;
+    }
+
+    .pagination span {
+        font-size: 16px;
+    }

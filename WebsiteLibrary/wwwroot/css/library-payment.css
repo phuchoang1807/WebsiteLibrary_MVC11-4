@@ -1,0 +1,183 @@
+/* Định dạng phần Section */
+.ftco-section.library-section {
+    padding: 60px 0 100px;
+    background: #e0f7fa; /* Nền nhạt giống LibraryRegisterCard */
+    position: relative;
+}
+
+/* Định dạng tiêu đề */
+.library-section-title {
+    font-family: 'Poppins', sans-serif;
+    font-size: 30px;
+    color: #ff6f61;
+    margin-bottom: 25px;
+    text-align: center;
+    position: relative;
+    padding-bottom: 15px;
+    text-transform: uppercase;
+}
+
+    .library-section-title::after {
+        content: '';
+        width: 70px;
+        height: 4px;
+        background: linear-gradient(90deg, #ff6f61, #ff9a7d);
+        position: absolute;
+        bottom: 0;
+        left: 50%;
+        transform: translateX(-50%);
+        border-radius: 2px;
+        animation: library-pulse 2s infinite;
+    }
+
+@keyframes library-pulse {
+    0% {
+        width: 70px;
+    }
+
+    50% {
+        width: 80px;
+    }
+
+    100% {
+        width: 70px;
+    }
+}
+
+/* Định dạng nội dung thanh toán */
+.library-payment-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+    background: linear-gradient(135deg, #e6faff, #f0f8ff); /* Gradient nhạt giống LibraryRegisterCard */
+    border-radius: 15px;
+    padding: 40px;
+    border: 2px solid #00b4d8; /* Viền xanh nhạt */
+}
+
+/* Định dạng mã QR */
+.library-qr-code {
+    width: 200px;
+    height: 200px;
+    border: 2px solid #00b4d8;
+    border-radius: 10px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: #fff;
+}
+
+/* Định dạng thông báo số tiền */
+.library-payment-note {
+    font-family: 'Poppins', sans-serif;
+    font-size: 16px;
+    font-weight: 500;
+    color: #ff6f61; /* Màu đỏ cam để nổi bật */
+    text-align: center;
+    margin: 10px 0;
+    padding: 10px;
+    background: rgba(255, 111, 97, 0.1); /* Nền nhạt để làm nổi bật */
+    border-radius: 5px;
+}
+
+/* Định dạng nút Lưu Ảnh */
+.library-save-button.btn {
+    background: linear-gradient(90deg, #ff6f61, #ff9a7d); /* Màu cam giống nút Thanh Toán trong LibraryRegisterCard */
+    color: #fff;
+    border: none;
+    border-radius: 30px;
+    font-family: 'Poppins', sans-serif;
+    font-size: 16px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 6px 15px rgba(255, 111, 97, 0.4);
+    position: relative;
+    overflow: hidden;
+}
+
+    .library-save-button.btn::after {
+        content: '';
+        position: absolute;
+        width: 0;
+        height: 100%;
+        background: rgba(255, 255, 255, 0.2);
+        top: 0;
+        left: 0;
+        transition: width 0.3s ease;
+        z-index: 0;
+    }
+
+    .library-save-button.btn:hover {
+        transform: scale(1.05);
+        box-shadow: 0 8px 20px rgba(255, 111, 97, 0.6);
+        background: linear-gradient(90deg, #ff6f61, #ff9a7d); /* Giữ gradient khi hover */
+    }
+
+        .library-save-button.btn:hover::after {
+            width: 100%;
+        }
+
+    .library-save-button.btn:active {
+        transform: scale(0.95);
+    }
+
+/* Responsive Adjustments */
+@media (max-width: 768px) {
+    .ftco-section.library-section {
+        padding: 40px 0 80px;
+    }
+
+    .library-section-title {
+        font-size: 26px;
+    }
+
+    .library-payment-content {
+        padding: 30px;
+    }
+
+    .library-qr-code {
+        width: 180px;
+        height: 180px;
+    }
+
+    .library-payment-note {
+        font-size: 14px;
+        padding: 8px;
+    }
+
+    .library-save-button.btn {
+        padding: 12px 30px;
+        font-size: 15px;
+    }
+}
+
+@media (max-width: 480px) {
+    .ftco-section.library-section {
+        padding: 30px 0 60px;
+    }
+
+    .library-section-title {
+        font-size: 22px;
+    }
+
+    .library-payment-content {
+        padding: 20px;
+    }
+
+    .library-qr-code {
+        width: 150px;
+        height: 150px;
+    }
+
+    .library-payment-note {
+        font-size: 13px;
+        padding: 6px;
+    }
+
+    .library-save-button.btn {
+        padding: 10px 25px;
+        font-size: 14px;
+    }
+}

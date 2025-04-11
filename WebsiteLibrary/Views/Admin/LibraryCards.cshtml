@@ -1,0 +1,176 @@
+﻿@model IEnumerable<WebsiteLibrary.Models.Entities.LibraryCard>
+@{
+    ViewBag.Title = "Quản lý thẻ thư viện";
+    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+}
+
+<!-- Library Cards Section -->
+<section class="library-cards-section">
+    <div class="container">
+        <div class="main-header">
+            <h1>Quản lý thẻ thư viện</h1>
+            <div class="button-group">
+                <button class="btn" onclick="showPendingCardsPopup()">
+                    <i class="fas fa-clipboard-check"></i> Duyệt thẻ thư viện
+                </button>
+                <button class="btn" onclick="showLockedCardsPopup()">
+                    <i class="fas fa-lock"></i> Danh sách các thẻ bị khóa
+                </button>
+            </div>
+        </div>
+
+        <!-- Thanh tìm kiếm -->
+        <div class="search-section">
+            <div class="search-container">
+                <div class="search-wrapper">
+                    <input type="text" id="search-input" placeholder="Tìm kiếm theo ID thẻ, ID độc giả hoặc tên độc giả..." oninput="searchCards()">
+                    <span class="search-icon" onclick="searchCards()"><i class="fas fa-search"></i></span>
+                    <span class="clear-search" id="clear-search" onclick="clearSearch()"><i class="fas fa-times"></i></span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Bảng Quản lý thẻ thư viện -->
+        <table id="library-cards-list">
+            <thead>
+                <tr>
+                    <th>ID thẻ thư viện</th>
+                    <th>ID độc giả</th>
+                    <th>Tên độc giả</th>
+                    <th>Ngày tạo</th>
+                    <th>Gia hạn</th>
+                    <th>Thao tác</th>
+                </tr>
+            </thead>
+            <tbody>
+                <!-- Dữ liệu sẽ được thêm động bằng JavaScript -->
+            </tbody>
+        </table>
+
+        <!-- Popup duyệt thẻ thư viện -->
+        <div id="pending-cards-popup" class="modal" style="display:none;">
+            <div class="modal-content">
+                <span class="close-button" onclick="closeModal('pending-cards-popup')">×</span>
+                <h2>Duyệt thẻ thư viện</h2>
+                <table id="pending-cards-table">
+                    <thead>
+                        <tr>
+                            <th>ID thẻ thư viện</th>
+                            <th>ID độc giả</th>
+                            <th>Tên độc giả</th>
+                            <th>Ngày tạo</th>
+                            <th>Gia hạn</th>
+                            <th>Thao tác</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <!-- Dữ liệu sẽ được thêm động bằng JavaScript -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Popup xác nhận/loại bỏ thẻ -->
+        <div id="confirm-action-popup" class="modal" style="display:none;">
+            <div class="modal-content">
+                <span class="close-button" onclick="closeModal('confirm-action-popup')">×</span>
+                <h2 id="confirm-action-title"></h2>
+                <p id="confirm-action-message"></p>
+                <div class="modal-actions">
+                    <button class="btn btn-confirm" id="confirm-action-btn">
+                        <i class="fas fa-check"></i> Xác nhận
+                    </button>
+                    <button class="btn btn-cancel" onclick="closeModal('confirm-action-popup')">
+                        <i class="fas fa-times"></i> Hủy
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Popup chi tiết độc giả/thẻ thư viện -->
+        <div id="reader-details-popup" class="modal" style="display:none;">
+            <div class="modal-content">
+                <span class="close-button" onclick="closeModal('reader-details-popup')">×</span>
+                <h2 id="reader-details-title"></h2>
+                <div class="reader-info" id="reader-info-content">
+                    <!-- Nội dung sẽ được thêm động bằng JavaScript -->
+                </div>
+                <div class="modal-actions" id="reader-details-actions">
+                    <button class="btn btn-lock" onclick="lockCardConfirm()">
+                        <i class="fas fa-lock"></i> Khóa thẻ
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Popup xác nhận khóa thẻ -->
+        <div id="lock-card-popup" class="modal" style="display:none;">
+            <div class="modal-content">
+                <span class="close-button" onclick="closeModal('lock-card-popup')">×</span>
+                <h2>Xác nhận khóa thẻ</h2>
+                <p>Bạn có chắc chắn muốn khóa thẻ của độc giả này?</p>
+                <div class="modal-actions">
+                    <button class="btn btn-confirm" onclick="lockCard()">
+                        <i class="fas fa-check"></i> Xác nhận
+                    </button>
+                    <button class="btn btn-cancel" onclick="closeModal('lock-card-popup')">
+                        <i class="fas fa-times"></i> Hủy
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Popup danh sách thẻ bị khóa -->
+        <div id="locked-cards-popup" class="modal" style="display:none;">
+            <div class="modal-content">
+                <span class="close-button" onclick="closeModal('locked-cards-popup')">×</span>
+                <h2>Danh sách các thẻ bị khóa</h2>
+                <table id="locked-cards-table">
+                    <thead>
+                        <tr>
+                            <th>ID thẻ thư viện</th>
+                            <th>ID độc giả</th>
+                            <th>Tên độc giả</th>
+                            <th>Ngày tạo</th>
+                            <th>Gia hạn</th>
+                            <th>Thao tác</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <!-- Dữ liệu sẽ được thêm động bằng JavaScript -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Popup xác nhận mở khóa thẻ -->
+        <div id="unlock-card-popup" class="modal" style="display:none;">
+            <div class="modal-content">
+                <span class="close-button" onclick="closeModal('unlock-card-popup')">×</span>
+                <h2>Xác nhận mở khóa thẻ</h2>
+                <p>Bạn có chắc chắn muốn mở khóa thẻ của độc giả này?</p>
+                <div class="modal-actions">
+                    <button class="btn btn-confirm" onclick="unlockCard()">
+                        <i class="fas fa-check"></i> Xác nhận
+                    </button>
+                    <button class="btn btn-cancel" onclick="closeModal('unlock-card-popup')">
+                        <i class="fas fa-times"></i> Hủy
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Popup thông báo tùy chỉnh -->
+        <div id="custom-alert-popup" class="custom-alert" style="display:none;">
+            <div class="custom-alert-content">
+                <p id="custom-alert-message"></p>
+                <button class="btn btn-ok" onclick="closeCustomAlert()">OK</button>
+            </div>
+        </div>
+    </div>
+</section>
+
+@section Scripts {
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/js/all.min.js"></script>
+    <script src="~/js/admin-library-cards.js"></script>
+}

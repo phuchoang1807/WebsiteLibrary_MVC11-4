@@ -1,0 +1,112 @@
+﻿@{
+    ViewBag.Title = "Quản lý yêu cầu đặt mượn sách";
+    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+}
+
+<div class="main-header">
+    <h1>Quản lý yêu cầu đặt mượn sách</h1>
+</div>
+
+<!-- Nút "Danh sách phiếu đã xử lý" -->
+<div class="action-buttons">
+    <button class="btn btn-processed" onclick="showProcessedRequestsModal()">Danh sách phiếu đã xử lý</button>
+</div>
+
+<div class="search-section">
+    <div class="search-container">
+        <div class="search-wrapper">
+            <input type="text" id="search-input" placeholder="Tìm kiếm theo mã yêu cầu hoặc mã thẻ..." oninput="searchReservations()">
+            <span class="search-icon" onclick="searchReservations()"><i class="fas fa-search"></i></span>
+            <span class="clear-search" id="clear-search" onclick="clearSearch()"><i class="fas fa-times"></i></span>
+        </div>
+    </div>
+</div>
+
+<table id="order-list">
+    <thead>
+        <tr>
+            <th>Mã yêu cầu</th>
+            <th>Mã thẻ thư viện</th>
+            <th>Ngày gửi yêu cầu</th>
+            <th>Hạn giữ</th>
+            <th>Thao tác</th>
+        </tr>
+    </thead>
+    <tbody>
+        <!-- Dữ liệu sẽ được thêm động bằng JavaScript -->
+    </tbody>
+</table>
+
+<!-- Popup danh sách phiếu đã xử lý (dữ liệu giả lập để kiểm tra giao diện) -->
+<div id="processed-requests-modal" class="modal" style="display: none;">
+    <div class="modal-content">
+        <span class="close-button" onclick="closeModal('processed-requests-modal')">×</span>
+        <h2>Danh sách phiếu đã xử lý</h2>
+        <table class="book-detail-table">
+            <thead>
+                <tr>
+                    <th>Mã yêu cầu</th>
+                    <th>Mã thẻ thư viện</th>
+                    <th>Trạng thái</th>
+                    <th>Thao tác</th>
+                </tr>
+            </thead>
+            <tbody id="processed-requests-list">
+                <!-- Dữ liệu giả lập -->
+                <tr>
+                    <td>RQ001</td>
+                    <td>TV001</td>
+                    <td>Đã duyệt</td>
+                    <td>
+                        <a href="#" class="btn btn-view" onclick="showProcessedDetailsModal(0)">Chi tiết</a>
+                    </td>
+                </tr>
+                <tr>
+                    <td>RQ002</td>
+                    <td>TV002</td>
+                    <td>Đã hủy</td>
+                    <td>
+                        <a href="#" class="btn btn-view" onclick="showProcessedDetailsModal(1)">Chi tiết</a>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<!-- Popup chi tiết phiếu đã xử lý (dữ liệu giả lập để kiểm tra giao diện) -->
+<div id="processed-details-modal" class="modal" style="display: none;">
+    <div class="modal-content">
+        <span class="close-button" onclick="closeModal('processed-details-modal')">×</span>
+        <h2>Chi tiết phiếu đã xử lý</h2>
+        <p><strong>Mã yêu cầu:</strong> RQ001</p>
+        <p><strong>Mã thẻ thư viện:</strong> TV001</p>
+        <p><strong>Trạng thái:</strong> Đã duyệt</p>
+        <hr>
+        <table class="book-detail-table">
+            <thead>
+                <tr>
+                    <th>Số thứ tự</th>
+                    <th>Mã bản sao sách</th>
+                    <th>Tên sách</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>1</td>
+                    <td>BC001</td>
+                    <td>Lập trình C#</td>
+                </tr>
+                <tr>
+                    <td>2</td>
+                    <td>BC002</td>
+                    <td>Thiết kế giao diện</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+@section Scripts {
+    <script src="~/js/admin-book-loanrequest.js"></script>
+}

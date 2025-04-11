@@ -1,0 +1,130 @@
+﻿@model WebsiteLibrary.ViewModels.ConfirmBorrowViewModel
+
+@{
+    ViewBag.Title = "Xác nhận mượn sách";
+    Layout = "~/Views/Shared/_LayoutReader.cshtml";
+}
+
+<div class="hero-wrap hero-bread" style="background-image: url('/images/home_2.jpg');">
+    <div class="container">
+        <div class="row no-gutters slider-text align-items-center justify-content-center">
+            <div class="col-md-9 ftco-animate text-center">
+                <p class="breadcrumbs"><span class="mr-2"><a href="#">Xác Nhận</a></span> <span>Giữ Chỗ</span></p>
+                <h1 class="mb-0 bread">Borrow Book</h1>
+            </div>
+        </div>
+    </div>
+</div>
+
+<section class="ftco-section">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-xl-5 ftco-animate">
+                <form action="#" class="billing-form">
+                    <h3 class="mb-4 billing-heading">Chi tiết mượn sách</h3>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <label>Mã thẻ thư viện</label>
+                                <input type="text" class="form-control" value="@(Model.Reader.LibraryCards?.FirstOrDefault()?.CardID ?? "Chưa có mã thẻ")" readonly>
+                            </div>
+                        </div>
+                        <div class="w-100"></div>
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <label>Tên độc giả</label>
+                                <input type="text" class="form-control" value="@Model.Reader.Name" readonly>
+                            </div>
+                        </div>
+                        <div class="w-100"></div>
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <label>Số điện thoại</label>
+                                <input type="text" class="form-control" value="@Model.Reader.PhoneNumber" readonly>
+                            </div>
+                        </div>
+                        <div class="w-100"></div>
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <label>Địa chỉ</label>
+                                <input type="text" class="form-control" value="@Model.Reader.Address" readonly>
+                            </div>
+                        </div>
+                        <div class="w-100"></div>
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <label style="color: red; text-decoration: none">Lưu ý: <hr> Thời hạn mượn sách</label>
+                                <input type="text" class="form-control" id="borrowDeadline" value="@Model.BorrowDeadline.ToString("dd/MM/yyyy HH:mm")" readonly>
+                                <small class="d-block text-muted">Nếu quá thời hạn thì phiếu giữ sẽ bị hủy</small>
+                            </div>
+                        </div>
+                    </div>
+                </form><!-- END -->
+            </div>
+            <div class="col-xl-7">
+                <div class="borrow-list">
+                    <h3 class="billing-heading mb-3">Danh sách mượn</h3>
+                    @if (Model.CartItems != null && Model.CartItems.Any())
+                    {
+                        int index = 1;
+                        foreach (var item in Model.CartItems)
+                        {
+                            <div class="borrow-item d-flex align-items-center mb-3">
+                                <div class="item-stt text-end">@index</div>
+                                <img src="@(item.ImagePath ?? "/images/default-book.jpg")" alt="@item.Title" class="item-image me-3">
+                                <div class="item-info flex-grow-1">
+                                    <div class="item-name text-ellipsis" data-title="@item.Title">@item.Title</div>
+                                    <div class="item-quantity">x1</div>
+                                </div>
+                            </div>
+                            index++;
+                        }
+                    }
+                    else
+                    {
+                        <p class="text-center">Không có sách nào trong giỏ mượn.</p>
+                    }
+                    <p class="mt-4 text-center">
+                        <button id="create-loan-request" class="btn btn-primary py-2 px-3">Tạo phiếu mượn</button>
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+@section Scripts {
+    <script>
+        $(document).ready(function () {
+            $('#create-loan-request').click(function (e) {
+                e.preventDefault();
+
+                // Gửi yêu cầu AJAX tới server
+                $.ajax({
+                    url: '@Url.Action("CreateLoanRequest", "Reader")',
+                    type: 'POST',
+                    success: function (response) {
+                        if (response.success) {
+                            // Hiển thị thông báo thành công
+                            alert(response.message);
+
+                            // Cập nhật số lượng trên navbar (vì giỏ mượn đã bị xóa)
+                            $('#cart-count').text(0);
+
+                            // Chuyển hướng về trang LoanCart
+                            window.location.href = '/Reader/LoanCart';
+                        } else {
+                            // Hiển thị thông báo lỗi nếu có
+                            alert(response.message);
+                        }
+                    },
+                    error: function (xhr, status, error) {
+                        console.log("Status: " + status);
+                        console.log("Error: " + error);
+                        console.log("Response: " + xhr.responseText);
+                        alert('Đã xảy ra lỗi khi tạo phiếu mượn. Vui lòng thử lại. Kiểm tra console để biết chi tiết.');
+                    }
+                });
+            });
+        });
+    </script>
+}

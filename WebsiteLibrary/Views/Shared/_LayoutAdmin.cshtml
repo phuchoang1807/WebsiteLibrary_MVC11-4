@@ -1,0 +1,98 @@
+﻿<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <title>@ViewBag.Title - Admin</title>
+    <link rel="stylesheet" href="~/css/admin.css">
+    <link rel="stylesheet" href="~/css/admin-dashboard.css">
+    <link rel="stylesheet" href="~/css/admin-readers.css">
+    <link rel="stylesheet" href="~/css/admin-stats.css">
+    <link rel="stylesheet" href="~/css/admin-book-loanrequest.css">
+    <link rel="stylesheet" href="~/css/admin-borrow-records.css">
+    <link rel="stylesheet" href="~/css/admin-library-cards.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <header>
+        <div class="logo">Admin - YourWebsite</div>
+        <div class="user-info">
+            <span id="admin-name">@User.Identity.Name</span>
+            <a href="/Account/Logout">Đăng xuất</a>
+        </div>
+    </header>
+
+    <aside class="sidebar" id="sidebar">
+        <div class="sidebar-brand">
+            <i class="fas fa-book-open" style="padding-right: 8px;"></i>
+            <span>Books Admin</span>
+        </div>
+        <ul class="nav-list">
+            <li class="nav-item">
+                <a href="/Admin/Dashboard" class="nav-link">
+                    <i class="fas fa-tachometer-alt" style="padding-right: 8px;"></i>
+                    <span>Bảng điều khiển</span>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a href="/Admin/Readers" class="nav-link">
+                    <i class="fas fa-users" style="padding-right: 8px;"></i>
+                    <span>Quản lý độc giả</span>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a href="/Admin/Books" class="nav-link">
+                    <i class="fas fa-book" style="padding-right: 8px;"></i>
+                    <span>Quản lý sách</span>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a href="/Admin/ImportReceipt" class="nav-link">
+                    <i class="fas fa-receipt" style="padding-right: 8px;"></i>
+                    <span>Quản lý bản phiếu nhập</span>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a href="/Admin/LibraryCards" class="nav-link">
+                    <i class="fas fa-id-card" style="padding-right: 8px;"></i>
+                    <span>Quản lý thẻ thư viện</span>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a href="/Admin/BorrowRecords" class="nav-link">
+                    <i class="fas fa-tasks" style="padding-right: 8px;"></i>
+                    <span>Quản lý phiếu mượn trả</span>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a href="/Admin/LoanRequests" class="nav-link">
+                    <i class="fas fa-shopping-cart" style="padding-right: 8px;"></i>
+                    <span>Quản lý yêu cầu đặt mượn sách</span>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a href="/Admin/Stats" class="nav-link">
+                    <i class="fas fa-chart-area" style="padding-right: 8px;"></i>
+                    <span>Thống kê</span>
+                </a>
+            </li>
+        </ul>
+        <div class="sidebar-toggle">
+            <button id="sidebarToggle"><i class="fas fa-bars"></i></button>
+        </div>
+    </aside>
+
+    <main>
+        @RenderBody() <!-- Nội dung của từng trang sẽ được chèn vào đây -->
+    </main>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/js/all.min.js"></script>
+    <script>
+        document.getElementById('sidebarToggle').addEventListener('click', function() {
+            document.getElementById('sidebar').classList.toggle('toggled');
+        });
+    </script>
+    @RenderSection("Scripts", required: false) <!-- Thêm dòng này -->
+    @RenderSection("Styles", required: false)
+</body>
+</html>

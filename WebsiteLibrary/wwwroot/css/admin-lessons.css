@@ -1,0 +1,8 @@
+/* admin-lessons.css - CSS cho trang Quản lý bài giảng */
+#lesson-list {
+    margin-top: 20px;
+}
+
+#add-lesson-form {
+    margin-top: 20px;
+}

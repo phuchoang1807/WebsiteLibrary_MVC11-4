@@ -1,0 +1,116 @@
+﻿@{
+    ViewBag.Title = "Quản lý phiếu nhập";
+    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+}
+
+<link rel="stylesheet" href="~/css/admin-ImportReceipt.css" />
+
+
+    <div class="main-header">
+        <h1>Quản lý phiếu nhập - Bản sao sách</h1>
+        <button class="btn" onclick="showAddImportReceiptPopup()">
+            <i class="fas fa-plus"></i> Thêm phiếu nhập
+        </button>
+    </div>
+
+    <div class="search-section">
+        <div class="search-container">
+            <div class="search-wrapper">
+                <input type="text" id="search-input" placeholder="Tìm kiếm theo mã phiếu nhập..." oninput="searchBooks()">
+                <span class="search-icon" onclick="searchBooks()"><i class="fas fa-search"></i></span>
+                <span class="clear-search" id="clear-search" onclick="clearSearch()"><i class="fas fa-times"></i></span>
+            </div>
+        </div>
+    </div>
+
+    <table id="book-copy-list">
+        <thead>
+            <tr>
+                <th>Mã phiếu nhập</th>
+                <th>Ngày nhập</th>
+                <th>Nhà cung cấp</th>
+                <th>Thao tác</th>
+            </tr>
+        </thead>
+        <tbody></tbody>
+    </table>
+
+    <div id="add-import-receipt-modal" class="modal" style="display:none;">
+        <div class="modal-content">
+            <span class="close-button" onclick="closeModal('add-import-receipt-modal')">×</span>
+            <h2>Thêm phiếu nhập</h2>
+            <div class="form-group">
+                <label>Ngày nhập <span class="required">*</span>:</label>
+                <input type="text" id="add-created-at" placeholder="DD/MM/YYYY" required>
+            </div>
+            <div class="form-group">
+                <label>Nhà cung cấp <span class="required">*</span>:</label>
+                <input type="text" id="add-supplier" required>
+            </div>
+            <div class="form-group">
+                <label>Danh sách đầu sách:</label>
+                <div id="book-list"></div>
+                <button class="btn btn-add-book" onclick="addBookEntry()">
+                    <i class="fas fa-plus"></i> Thêm đầu sách
+                </button>
+            </div>
+            <div class="modal-actions">
+                <button class="btn btn-save" onclick="confirmAddImportReceipt()">
+                    <i class="fas fa-save"></i> Lưu
+                </button>
+                <button class="btn btn-cancel" onclick="closeModal('add-import-receipt-modal')">
+                    <i class="fas fa-times"></i> Hủy
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <div id="confirm-add-receipt-popup" class="modal" style="display:none;">
+        <div class="modal-content">
+            <span class="close-button" onclick="closeModal('confirm-add-receipt-popup')">×</span>
+            <h2>Xác nhận thêm phiếu nhập</h2>
+            <p>Bạn có chắc chắn muốn thêm phiếu nhập này?</p>
+            <div class="modal-actions">
+                <button class="btn btn-confirm" onclick="saveImportReceipt()">
+                    <i class="fas fa-check"></i> Xác nhận
+                </button>
+                <button class="btn btn-cancel" onclick="closeModal('confirm-add-receipt-popup')">
+                    <i class="fas fa-times"></i> Hủy
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <div id="book-copy-details-modal" class="modal" style="display:none;">
+        <div class="modal-content">
+            <span class="close-button" onclick="closeModal('book-copy-details-modal')">×</span>
+            <h2>Chi tiết phiếu nhập</h2>
+            <p><strong>Mã phiếu nhập:</strong> <span id="detail-receipt-id"></span></p>
+            <p><strong>Ngày nhập:</strong> <span id="detail-created-at"></span></p>
+            <p><strong>Nhà cung cấp:</strong> <span id="detail-supplier"></span></p>
+            <hr>
+            <table class="book-detail-table">
+                <thead>
+                    <tr>
+                        <th>Mã đầu sách</th>
+                        <th>Số lượng</th>
+                        <th>Giá nhập</th>
+                    </tr>
+                </thead>
+                <tbody id="detail-book-list"></tbody>
+            </table>
+        </div>
+    </div>
+
+    <div id="custom-alert-popup" class="custom-alert" style="display:none;">
+        <div class="custom-alert-content">
+            <p id="custom-alert-message"></p>
+            <button class="btn btn-ok" onclick="closeCustomAlert()">OK</button>
+        </div>
+    </div>
+
+
+@section Scripts {
+    @Html.AntiForgeryToken() <!-- Thêm CSRF token -->
+    <script src="~/js/admin-ImportReceipt.js"></script>
+}

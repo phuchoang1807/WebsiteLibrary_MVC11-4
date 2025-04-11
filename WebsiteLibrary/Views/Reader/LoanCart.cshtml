@@ -1,0 +1,123 @@
+﻿@model List<WebsiteLibrary.Models.LoanCartItem>
+
+@{
+    ViewBag.Title = "Danh sách mượn";
+    Layout = "~/Views/Shared/_LayoutReader.cshtml";
+}
+
+<div class="hero-wrap hero-bread" style="background-image: url('/images/home.jpg');">
+    <div class="container">
+        <div class="row no-gutters slider-text align-items-center justify-content-center">
+            <div class="col-md-9 ftco-animate text-center">
+                <p class="breadcrumbs">
+                    <span class="mr-2"><a href="/Reader/Library">Danh sách</a></span>
+                    <span>mượn</span>
+                </p>
+                <h1 class="mb-0 bread">Danh sách mượn</h1>
+            </div>
+        </div>
+    </div>
+</div>
+
+<section class="ftco-section ftco-cart">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12 ftco-animate">
+                <div class="cart-list">
+                    <table class="table">
+                        <thead class="thead-primary">
+                            <tr class="text-center">
+                                <th>&nbsp;</th>
+                                <th>&nbsp;</th>
+                                <th>Tên sách</th>
+                                <th>Số lượng sẵn sàng</th>
+                                <th>Trạng thái</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @if (Model != null && Model.Any())
+                            {
+                                foreach (var item in Model)
+                                {
+                                    <tr class="text-center">
+                                        <td class="book-remove">
+                                            <a href="#" class="remove-from-cart" data-bookid="@item.BookID">
+                                                <span class="ion-ios-close"></span>
+                                            </a>
+                                        </td>
+                                        <td class="image-prod">
+                                            <div class="img" style="background-image:url('@(item.ImagePath ?? "/images/default-book.jpg")');"></div>
+                                        </td>
+                                        <td class="book-name">
+                                            <h3>@item.Title</h3>
+                                        </td>
+                                        <td class="quantity">@item.AvailableQuantity</td>
+                                        <td class="total">@item.Status</td>
+                                    </tr>
+                                }
+                            }
+                            else
+                            {
+                                <tr>
+                                    <td colspan="5" class="text-center">Giỏ mượn trống.</td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        <div class="row justify-content-center mt-4">
+            <div class="col-md-12 text-center">
+                <p style="color: red;"><strong>Lưu ý:</strong></p>
+                <p>Mỗi sách được giữ chỗ mượn một cuốn.</p>
+                <p>Bạn phải đến mượn sách trong 2 ngày kể từ sau khi giữ chỗ mượn sách!</p>
+            </div>
+            <div class="col-md-4 text-center mt-4">
+                <p><a href="@Url.Action("ConfirmBorrow", "Reader")" class="btn btn-primary py-3 px-4">Tiến hành mượn sách</a></p>
+            </div>
+        </div>
+    </div>
+</section>
+
+@section Scripts {
+    <script>
+        $(document).ready(function () {
+            $('.remove-from-cart').click(function (e) {
+                e.preventDefault();
+                var bookId = $(this).data('bookid');
+                var $row = $(this).closest('tr'); // Lấy hàng (row) chứa nút xóa
+
+                // Hiển thị thông báo xác nhận
+                if (confirm('Bạn có chắc chắn muốn xóa sách này khỏi giỏ mượn không?')) {
+                    // Gửi yêu cầu AJAX tới server
+                    $.ajax({
+                        url: '/Reader/RemoveFromCart', // Đường dẫn tới hành động RemoveFromCart
+                        type: 'POST',
+                        data: { bookId: bookId },
+                        success: function (response) {
+                            if (response.success) {
+                                // Xóa hàng khỏi bảng nếu thành công
+                                $row.remove();
+
+                                // Cập nhật số lượng trên navbar
+                                var currentCount = parseInt($('#cart-count').text());
+                                $('#cart-count').text(currentCount - 1);
+
+                                // Kiểm tra nếu giỏ mượn trống thì hiển thị thông báo
+                                if ($('.cart-list tbody tr').length === 0) {
+                                    $('.cart-list tbody').html('<tr><td colspan="5" class="text-center">Giỏ mượn trống.</td></tr>');
+                                }
+                            } else {
+                                alert(response.message); // Hiển thị thông báo lỗi nếu có
+                            }
+                        },
+                        error: function () {
+                            alert('Đã xảy ra lỗi khi xóa sách. Vui lòng thử lại.');
+                        }
+                    });
+                }
+            });
+        });
+    </script>
+}

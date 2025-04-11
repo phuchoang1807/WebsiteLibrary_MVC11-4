@@ -1,0 +1,99 @@
+﻿@model WebsiteLibrary.Models.ViewModels.DashboardViewModel
+@{
+    ViewBag.Title = "Bảng điều khiển";
+    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+}
+
+<h1>Bảng điều khiển</h1>
+<div class="stats">
+    <div class="card">
+        <h3>Hoạt động hôm nay</h3>
+        <div>Lượt mượn: <span id="today-borrows">@Model.TodayBorrows</span></div>
+        <div>Lượt trả: <span id="today-returns">@Model.TodayReturns</span></div>
+    </div>
+    <div class="card">
+        <h3>Tình trạng sách</h3>
+        <div>Tổng số sách: <span id="total-books">@Model.TotalBooks</span></div>
+        <div>Đang cho mượn: <span id="borrowed-books">@Model.BorrowedBooks</span></div>
+    </div>
+    <div class="card">
+        <h3>Đặt mượn</h3>
+        <div>Yêu cầu mượn chờ duyệt: <span id="pending-reservations">@Model.PendingReservations</span></div>
+        <div>Phiếu mượn quá hạn: <span id="overdue-books">@Model.OverdueBooks</span></div>
+    </div>
+</div>
+
+<section>
+    <h2>Biểu đồ hoạt động mượn/trả sách trong tháng</h2>
+    <div class="chart-container">
+        <canvas id="activityChart"></canvas>
+    </div>
+</section>
+
+<h2>Hoạt động gần đây</h2>
+<table id="recent-stats">
+    <thead>
+        <tr>
+            <th>Sách</th>
+            <th>Thể loại</th>
+            <th>Tên độc giả</th>
+            <th>Ngày</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var activity in Model.RecentActivities)
+        {
+            <tr>
+                <td>@activity.BookTitle</td>
+                <td>@activity.Category</td>
+                <td>@activity.ReaderName</td>
+                <td>@activity.BorrowDate.ToString("dd/MM/yyyy HH:mm")</td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+@section Scripts {
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+        const currentDate = new Date();
+        const daysInMonth = new Date(currentDate.getFullYear(), currentDate.getMonth() + 1, 0).getDate();
+        const dayLabels = Array.from({ length: daysInMonth }, (_, i) => i + 1);
+
+        const activityCtx = document.getElementById('activityChart').getContext('2d');
+        new Chart(activityCtx, {
+            type: 'line',
+            data: {
+                labels: dayLabels,
+                datasets: [
+                    {
+                        label: 'Lượt mượn sách',
+                        data: @Html.Raw(Json.Serialize(Model.BorrowData)),
+                        borderColor: '#2DA645',
+                        backgroundColor: 'rgba(45, 166, 69, 0.1)',
+                        tension: 0.3,
+                        fill: true
+                    },
+                    {
+                        label: 'Lượt trả sách',
+                        data: @Html.Raw(Json.Serialize(Model.ReturnData)),
+                        borderColor: '#007bff',
+                        backgroundColor: 'rgba(0, 123, 255, 0.1)',
+                        tension: 0.3,
+                        fill: true
+                    }
+                ]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    title: { display: true, text: 'Hoạt động mượn/trả sách trong tháng' }
+                },
+                scales: {
+                    y: { beginAtZero: true, title: { display: true, text: 'Số lượt' } },
+                    x: { title: { display: true, text: 'Ngày trong tháng' } }
+                }
+            }
+        });
+    </script>
+}

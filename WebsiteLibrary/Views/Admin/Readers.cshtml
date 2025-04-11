@@ -1,0 +1,174 @@
+﻿@{
+    ViewBag.Title = "Quản lý độc giả";
+    
+    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+
+}
+
+<div class="main-header">
+    <h1>Quản lý độc giả</h1>
+    <button class="btn" onclick="showAddReaderPopup()">
+        <i class="fas fa-plus"></i> Thêm độc giả
+    </button>
+</div>
+<div class="search-section">
+    <div class="search-container">
+        <div class="search-wrapper">
+            <input type="text" id="search-input" placeholder="Tìm kiếm theo mã độc giả hoặc tên..." oninput="searchReaders()">
+            <span class="search-icon" onclick="searchReaders()"><i class="fas fa-search"></i></span>
+            <span class="clear-search" id="clear-search" onclick="clearSearch()"><i class="fas fa-times"></i></span>
+        </div>
+    </div>
+</div>
+<table id="reader-list">
+    <thead>
+        <tr>
+            <th>Mã độc giả</th>
+            <th>Họ và tên</th>
+            <th>Ngày sinh</th>
+            <th>Giới tính</th>
+            <th>Số điện thoại</th>
+            <th>Email</th>
+            <th>Địa chỉ</th>
+            <th>Trình độ học vấn</th>
+            <th>Thao tác</th>
+        </tr>
+    </thead>
+    <tbody>
+    </tbody>
+</table>
+
+<!-- Popup thêm độc giả -->
+<div id="add-reader-popup" class="modal" style="display:none;">
+    <div class="modal-content">
+        <span class="close-button" onclick="closeModal('add-reader-popup')">×</span>
+        <h2>Thêm độc giả</h2>
+        <div class="form-group">
+            <label>Họ và tên <span class="required">*</span>:</label>
+            <input type="text" id="add-reader-name" required>
+        </div>
+        <div class="form-group">
+            <label>Ngày sinh (DD/MM/YYYY) <span class="required">*</span>:</label>
+            <input type="text" id="add-reader-dob" maxlength="10" placeholder="DD/MM/YYYY" required>
+        </div>
+        <div class="form-group">
+            <label>Giới tính <span class="required">*</span>:</label>
+            <select id="add-reader-gender" required>
+                <option value="">Chọn giới tính</option>
+                <option value="Nam">Nam</option>
+                <option value="Nữ">Nữ</option>
+                <option value="Khác">Khác</option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label>Số điện thoại <span class="required">*</span>:</label>
+            <input type="text" id="add-reader-phone" maxlength="10" oninput="this.value = this.value.replace(/[^0-9]/g, '')" required>
+        </div>
+        <div class="form-group">
+            <label>Email <span class="required">*</span>:</label>
+            <input type="email" id="add-reader-email" required>
+        </div>
+        <div class="form-group">
+            <label>Địa chỉ <span class="required">*</span>:</label>
+            <input type="text" id="add-reader-address" required>
+        </div>
+        <div class="form-group">
+            <label>Trình độ học vấn <span class="required">*</span>:</label>
+            <select id="add-reader-education" required>
+                <option value="">Chọn trình độ</option>
+                <option value="Trung học">Trung học</option>
+                <option value="Cao học">Cao học</option>
+            </select>
+        </div>
+        <div class="modal-actions">
+            <button class="btn btn-save" onclick="addReader()">
+                <i class="fas fa-save"></i> Lưu
+            </button>
+            <button class="btn btn-cancel" onclick="closeModal('add-reader-popup')">
+                <i class="fas fa-times"></i> Hủy
+            </button>
+        </div>
+    </div>
+</div>
+
+<!-- Popup chỉnh sửa độc giả -->
+<div id="edit-reader-popup" class="modal" style="display:none;">
+    <div class="modal-content">
+        <span class="close-button" onclick="closeModal('edit-reader-popup')">×</span>
+        <h2>Chỉnh sửa độc giả</h2>
+        <div class="form-group">
+            <label>Họ và tên <span class="required">*</span>:</label>
+            <input type="text" id="edit-reader-name" required>
+        </div>
+        <div class="form-group">
+            <label>Ngày sinh (DD/MM/YYYY) <span class="required">*</span>:</label>
+            <input type="text" id="edit-reader-dob" maxlength="10" placeholder="DD/MM/YYYY" required>
+        </div>
+        <div class="form-group">
+            <label>Giới tính <span class="required">*</span>:</label>
+            <select id="edit-reader-gender" required>
+                <option value="">Chọn giới tính</option>
+                <option value="Nam">Nam</option>
+                <option value="Nữ">Nữ</option>
+                <option value="Khác">Khác</option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label>Số điện thoại <span class="required">*</span>:</label>
+            <input type="text" id="edit-reader-phone" maxlength="10" oninput="this.value = this.value.replace(/[^0-9]/g, '')" required>
+        </div>
+        <div class="form-group">
+            <label>Email <span class="required">*</span>:</label>
+            <input type="email" id="edit-reader-email" required>
+        </div>
+        <div class="form-group">
+            <label>Địa chỉ <span class="required">*</span>:</label>
+            <input type="text" id="edit-reader-address" required>
+        </div>
+        <div class="form-group">
+            <label>Trình độ học vấn <span class="required">*</span>:</label>
+            <select id="edit-reader-education" required>
+                <option value="">Chọn trình độ</option>
+                <option value="Trung học">Trung học</option>
+                <option value="Cao học">Cao học</option>
+            </select>
+        </div>
+        <div class="modal-actions">
+            <button class="btn btn-save" onclick="saveEditedReader()">
+                <i class="fas fa-save"></i> Lưu
+            </button>
+            <button class="btn btn-cancel" onclick="closeModal('edit-reader-popup')">
+                <i class="fas fa-times"></i> Hủy
+            </button>
+        </div>
+    </div>
+</div>
+
+<!-- Popup xác nhận xóa độc giả -->
+<div id="delete-reader-popup" class="modal" style="display:none;">
+    <div class="modal-content">
+        <span class="close-button" onclick="closeModal('delete-reader-popup')">×</span>
+        <h2>Xác nhận xóa độc giả</h2>
+        <p>Bạn có chắc chắn muốn xóa độc giả này?</p>
+        <div class="modal-actions">
+            <button class="btn btn-confirm" onclick="deleteReader()">
+                <i class="fas fa-check"></i> Xác nhận
+            </button>
+            <button class="btn btn-cancel" onclick="closeModal('delete-reader-popup')">
+                <i class="fas fa-times"></i> Hủy
+            </button>
+        </div>
+    </div>
+</div>                                                                  
+
+<!-- Popup thông báo tùy chỉnh -->
+<div id="custom-alert-popup" class="custom-alert" style="display:none;">
+    <div class="custom-alert-content">
+        <p id="custom-alert-message"></p>
+        <button class="btn btn-ok" onclick="closeCustomAlert()">OK</button>
+    </div>
+</div>
+
+@section Scripts {
+    <script src="~/js/admin-readers.js"></script>
+}

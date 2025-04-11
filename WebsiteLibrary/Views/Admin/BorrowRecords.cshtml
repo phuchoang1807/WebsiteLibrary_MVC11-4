@@ -1,0 +1,204 @@
+﻿@{
+    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+}
+
+    <div class="main-header">
+        <h1>Quản lý phiếu mượn trả</h1>
+        <div class="header-actions">
+            <button class="btn" onclick="showAddModal()">
+                <i class="fas fa-plus"></i> Thêm phiếu mượn
+            </button>
+            <button class="btn" onclick="showHistoryModal()">
+                <i class="fas fa-history"></i> Lịch sử phiếu mượn trả
+            </button>
+        </div>
+    </div>
+
+    <div class="search-section">
+        <div class="search-container">
+            <div class="search-wrapper">
+                <input type="text" id="search-input" placeholder="Tìm kiếm theo mã phiếu mượn hoặc tên độc giả..." oninput="searchBorrowRecords()">
+                <span class="search-icon" onclick="searchBorrowRecords()"><i class="fas fa-search"></i></span>
+                <span class="clear-search" id="clear-search" onclick="clearSearch()"><i class="fas fa-times"></i></span>
+            </div>
+        </div>
+    </div>
+
+    <table id="borrow-records-list">
+        <thead>
+            <tr>
+                <th>Mã phiếu mượn</th>
+                <th>Mã thẻ thư viện</th>
+                <th>Tên độc giả</th>
+                <th>Ngày mượn</th>
+                <th>Ngày đến hạn</th>
+                <th>Thao tác</th>
+            </tr>
+        </thead>
+        <tbody>
+            <!-- Dữ liệu sẽ được thêm động bằng JavaScript -->
+        </tbody>
+    </table>
+
+    <!-- Modal thêm phiếu mượn -->
+    <div id="add-modal" class="modal">
+        <div class="modal-content">
+            <span class="close-button" onclick="closeModal('add-modal')">×</span>
+            <h2>Thêm phiếu mượn</h2>
+            <div class="form-group">
+                <label for="card-id">Mã thẻ thư viện</label>
+                <input type="text" id="card-id" required>
+            </div>
+            <div class="form-group">
+                <label for="borrow-date">Ngày mượn</label>
+                <input type="date" id="borrow-date" required>
+            </div>
+            <div class="form-group">
+                <label for="borrow-duration">Thời hạn mượn</label>
+                <select id="borrow-duration" required>
+                    <option value="7 ngày">7 ngày</option>
+                    <option value="14 ngày" selected>14 ngày</option>
+                    <option value="30 ngày">30 ngày</option>
+                </select>
+            </div>
+            <div class="book-list-section">
+                <h3>Danh sách sách mượn</h3>
+                <div id="book-list"></div>
+                <button class="btn btn-add-book" onclick="addBook()"><i class="fas fa-plus"></i> Thêm sách</button>
+            </div>
+            <div class="modal-actions">
+                <button class="btn btn-save" onclick="saveBorrowRecord()">Lưu</button>
+                <button class="btn btn-cancel" onclick="closeModal('add-modal')">Hủy</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal chi tiết phiếu mượn -->
+    <div id="borrow-details-modal" class="modal">
+        <div class="modal-content">
+            <span class="close-button" onclick="closeModal('borrow-details-modal')">×</span>
+            <h2>Chi tiết phiếu mượn</h2>
+            <div class="borrow-info">
+                <p><strong>Mã phiếu mượn:</strong> <span id="modal-borrow-id"></span></p>
+                <p><strong>Mã thẻ thư viện:</strong> <span id="modal-borrow-card-id"></span></p>
+                <p><strong>Ngày mượn:</strong> <span id="modal-borrow-date"></span></p>
+                <p><strong>Thời hạn mượn:</strong> <span id="modal-borrow-duration"></span></p>
+            </div>
+            <div class="book-list-section">
+                <h3>Danh sách sách mượn:</h3>
+                <table class="book-detail-table">
+                    <thead>
+                        <tr>
+                            <th>Mã sách</th>
+                            <th>Tên sách</th>
+                            <th>Tình trạng</th>
+                        </tr>
+                    </thead>
+                    <tbody id="modal-book-list"></tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal tạo phiếu tạo phiếu trả -->
+    <div id="return-modal" class="modal">
+        <div class="modal-content">
+            <span class="close-button" onclick="closeModal('return-modal')">×</span>
+            <h2>Tạo phiếu trả</h2>
+            <div class="form-group">
+                <label>Ngày trả</label>
+                <input type="date" id="return-date" required>
+            </div>
+            <div class="form-group">
+                <label>Danh sách sách mượn:</label>
+                <table class="book-detail-table">
+                    <thead>
+                        <tr>
+                            <th>Mã sách</th>
+                            <th>Tên sách</th>
+                            <th>Tình trạng</th>
+                        </tr>
+                    </thead>
+                    <tbody id="return-book-list"></tbody>
+                </table>
+            </div>
+            <div class="modal-actions">
+                <button class="btn btn-save" onclick="saveReturnRecord()">Lưu</button>
+                <button class="btn btn-cancel" onclick="closeModal('return-modal')">Hủy</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal lịch sử phiếu mượn trả -->
+    <div id="history-modal" class="modal history-modal">
+        <div class="modal-content history-modal-content">
+            <span class="close-button" onclick="closeModal('history-modal')">×</span>
+            <h2>Lịch sử phiếu mượn trả</h2>
+            <div class="search-section">
+                <div class="search-container">
+                    <div class="search-wrapper">
+                        <input type="text" id="history-search-input" placeholder="Tìm kiếm theo mã phiếu mượn hoặc tên độc giả..." oninput="searchHistoryRecords()">
+                        <span class="search-icon" onclick="searchHistoryRecords()"><i class="fas fa-search"></i></span>
+                        <span class="clear-search" id="history-clear-search" onclick="clearHistorySearch()"><i class="fas fa-times"></i></span>
+                    </div>
+                </div>
+            </div>
+            <table id="history-list">
+                <thead>
+                    <tr>
+                        <th>Mã phiếu mượn</th>
+                        <th>Mã phiếu trả</th>
+                        <th>Mã thẻ thư viện</th>
+                        <th>Tên độc giả</th>
+                        <th>Ngày mượn</th>
+                        <th>Ngày trả</th>
+                        <th>Thao tác</th>
+                    </tr>
+                </thead>
+                <tbody></tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- Modal chi tiết phiếu mượn trả -->
+    <div id="history-details-modal" class="modal">
+        <div class="modal-content">
+            <span class="close-button" onclick="closeModal('history-details-modal')">×</span>
+            <h2>Chi tiết phiếu mượn trả</h2>
+            <div class="borrow-info">
+                <p><strong>Mã phiếu mượn:</strong> <span id="history-modal-borrow-id"></span></p>
+                <p><strong>Mã phiếu trả:</strong> <span id="history-modal-return-id"></span></p>
+                <p><strong>Mã thẻ thư viện:</strong> <span id="history-modal-card-id"></span></p>
+                <p><strong>Tên độc giả:</strong> <span id="history-modal-reader-name"></span></p>
+                <p><strong>Ngày mượn:</strong> <span id="history-modal-borrow-date"></span></p>
+                <p><strong>Đăng ký mượn:</strong> <span id="history-modal-duration"></span></p>
+                <p><strong>Ngày trả:</strong> <span id="history-modal-return-date"></span></p>
+            </div>
+            <div class="book-list-section">
+                <h3>Danh sách sách mượn:</h3>
+                <table class="book-detail-table">
+                    <thead>
+                        <tr>
+                            <th>Mã sách</th>
+                            <th>Tên sách</th>
+                            <th>Tình trạng</th>
+                        </tr>
+                    </thead>
+                    <tbody id="history-modal-book-list"></tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal thông báo -->
+    <div id="notification-modal" class="notification-modal">
+        <div class="notification-content">
+            <p id="notification-message"></p>
+            <button class="btn btn-ok" onclick="closeNotificationModal()">OK</button>
+        </div>
+    </div>
+
+
+@section Scripts {
+    <script src="~/js/admin-borrow-records.js"></script>
+}

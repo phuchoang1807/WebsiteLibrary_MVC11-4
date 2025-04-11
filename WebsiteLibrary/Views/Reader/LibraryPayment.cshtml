@@ -1,0 +1,111 @@
+﻿@model dynamic
+@{
+    ViewBag.Title = "Thanh Toán Thẻ Thư Viện";
+    Layout = "~/Views/Shared/_LayoutReader.cshtml";
+}
+
+<!-- Library Payment Section -->
+<section class="ftco-section library-section">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-lg-8 ftco-animate">
+                <h2 class="library-section-title text-center mb-4">Thanh Toán Thẻ Thư Viện</h2>
+                <div class="library-payment-content">
+                    <div class="row">
+                        <!-- Cột bên trái: Mã QR -->
+                        <div class="col-md-6 text-center">
+                            <img src="/images/qr-code.jpg" alt="QR Code" style="max-width: 200px; height: auto;" />
+                            <p class="mt-2">Quét mã QR để thanh toán</p>
+                        </div>
+                        <!-- Cột bên phải: Thông tin thanh toán -->
+                        <div class="col-md-6">
+                            <div class="payment-details">
+                                <p><strong>Mã độc giả:</strong> <span id="accountId"></span></p>
+                                <p><strong>Họ và tên:</strong> <span id="readerName"></span></p>
+                                <p><strong>Ngày đăng ký:</strong> <span id="registerDate"></span></p>
+                                <p><strong>Ngày hết hạn:</strong> <span id="expiryDate"></span></p>
+                                <p><strong>Số tiền cần thanh toán:</strong> <span id="amount"></span> (vnd)</p>
+                                <p><strong>Thời gian còn lại:</strong> <span id="countdown">05:00</span></p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="text-center mt-4">
+                        <button id="confirmPayment" class="library-save-button btn py-3 px-5">Xác Nhận Thanh Toán</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+@section Scripts {
+    <script>
+        // Lấy dữ liệu từ localStorage
+        const cardRequestData = JSON.parse(localStorage.getItem('cardRequestData'));
+        if (cardRequestData) {
+            document.getElementById('accountId').textContent = cardRequestData.accountId;
+            document.getElementById('readerName').textContent = cardRequestData.readerName;
+            document.getElementById('registerDate').textContent = cardRequestData.registerDate;
+            document.getElementById('expiryDate').textContent = cardRequestData.expiryDate;
+            // Định dạng số tiền: thêm dấu chấm và đơn vị vnd
+            const formattedAmount = cardRequestData.amount.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.') + '.000';
+            document.getElementById('amount').textContent = formattedAmount;
+        } else {
+            alert('Không tìm thấy thông tin đăng ký thẻ. Vui lòng quay lại trang đăng ký.');
+            window.location.href = '/Reader/LibraryRegisterCard';
+        }
+
+        // Bộ đếm ngược 5 phút (300 giây)
+        let timeLeft = 300; // 300 giây = 5 phút
+        const countdownElement = document.getElementById('countdown');
+        const confirmButton = document.getElementById('confirmPayment');
+
+        const countdownTimer = setInterval(() => {
+            if (timeLeft <= 0) {
+                clearInterval(countdownTimer);
+                alert('Yêu cầu không được tạo do hết thời gian thanh toán.');
+                localStorage.removeItem('cardRequestData'); // Xóa dữ liệu
+                window.location.href = '/Reader/LibraryRegisterCard'; // Chuyển hướng về trang đăng ký
+                return;
+            }
+
+            const minutes = Math.floor(timeLeft / 60);
+            const seconds = timeLeft % 60;
+            countdownElement.textContent = `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+            timeLeft--;
+        }, 1000);
+
+        // Xử lý xác nhận thanh toán
+        confirmButton.addEventListener('click', function () {
+            // Dừng bộ đếm ngược khi bấm xác nhận
+            clearInterval(countdownTimer);
+
+            fetch('/Reader/ConfirmPayment', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(cardRequestData)
+            })
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error(`HTTP error! Status: ${response.status}`);
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    if (data.success) {
+                        alert(data.message);
+                        localStorage.removeItem('cardRequestData'); // Xóa dữ liệu sau khi thanh toán
+                        window.location.href = '/Reader/Info'; // Chuyển hướng về trang thông tin cá nhân
+                    } else {
+                        alert('Lỗi: ' + data.message);
+                    }
+                })
+                .catch(error => {
+                    console.error('Error confirming payment:', error);
+                    alert('Lỗi khi xác nhận thanh toán: ' + error.message);
+                });
+        });
+    </script>
+}

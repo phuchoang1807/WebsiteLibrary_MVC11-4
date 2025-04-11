@@ -1,0 +1,413 @@
+/* Reset mặc định để giao diện đồng nhất */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* Định dạng phần Main */
+.lib-renew-main-section {
+    padding: 60px 0 100px;
+    background: linear-gradient(135deg, #e0f7fa, #b2ebf2, #80deea, #4dd0e1);
+    background-size: 400% 400%;
+    animation: gradientBG 15s ease infinite;
+    position: relative;
+}
+
+@keyframes gradientBG {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+}
+
+.lib-renew-main-wrapper {
+    max-width: 600px;
+    margin: 0 auto;
+    padding: 0 20px;
+    box-sizing: border-box;
+    position: relative;
+    min-height: calc(100vh - 160px);
+}
+
+/* Định dạng nội dung chính */
+.lib-renew-content-section {
+    display: none;
+    background: rgba(255, 255, 255, 0.95);
+    border-radius: 15px;
+    padding: 40px;
+    position: relative;
+    overflow: hidden;
+    transition: all 0.4s ease;
+    border: 1px solid #ddd;
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+    animation: fadeInUp 0.8s ease-out;
+}
+
+.lib-renew-content-section.active {
+    display: block;
+}
+
+.lib-renew-content-section:hover {
+    transform: translateY(-10px) scale(1.03);
+    box-shadow: 0 12px 24px rgba(0, 0, 0, 0.15);
+}
+
+@keyframes fadeInUp {
+    0% { opacity: 0; transform: translateY(20px); }
+    100% { opacity: 1; transform: translateY(0); }
+}
+
+/* Tiêu đề chính */
+.lib-renew-section-title {
+    font-family: 'Poppins', sans-serif;
+    font-size: 24px;
+    color: #28a745;
+    margin-bottom: 25px;
+    text-align: center;
+    position: relative;
+    padding-bottom: 15px;
+    text-transform: uppercase;
+    animation: textGlow 2s infinite alternate;
+}
+
+@keyframes textGlow {
+    0% { text-shadow: 0 0 5px rgba(40, 167, 69, 0.5); }
+    100% { text-shadow: 0 0 15px rgba(40, 167, 69, 0.8); }
+}
+
+.lib-renew-section-title::after {
+    content: '';
+    width: 70px;
+    height: 4px;
+    background: linear-gradient(90deg, #28a745, #218838);
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    border-radius: 2px;
+    animation: lib-renew-pulse 2s infinite;
+}
+
+@keyframes lib-renew-pulse {
+    0% { width: 70px; }
+    50% { width: 90px; }
+    100% { width: 70px; }
+}
+
+/* Định dạng container chính */
+.lib-renew-card-container {
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
+}
+
+/* Ô lớn chung cho thông tin thẻ và thông tin gia hạn */
+.lib-info-box {
+    background: #f9f9f9;
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    padding: 20px;
+    text-align: center;
+    transition: all 0.3s ease;
+}
+
+.lib-info-box:hover {
+    background: #fff;
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
+}
+
+/* Thông tin thẻ */
+.lib-renew-card-info {
+    text-align: center;
+}
+
+.lib-renew-card-grid {
+    display: grid;
+    grid-template-columns: 150px minmax(100px, 1fr) minmax(100px, 1fr);
+    gap: 20px;
+    align-items: center;
+    justify-content: center;
+}
+
+.lib-renew-card-image {
+    grid-column: 1;
+}
+
+.lib-renew-card-photo {
+    width: 100%;
+    height: auto;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    object-fit: cover;
+    transition: transform 0.3s ease;
+}
+
+.lib-renew-card-photo:hover {
+    transform: scale(1.05);
+}
+
+.lib-renew-card-details {
+    grid-column: 2 / span 2;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.lib-renew-info-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    transition: all 0.3s ease;
+}
+
+.lib-renew-info-row:hover {
+    transform: translateX(5px);
+}
+
+.lib-renew-info-label {
+    font-family: 'Poppins', sans-serif;
+    font-size: 16px;
+    font-weight: 500;
+    color: #28a745;
+    text-align: right;
+    padding: 5px 10px;
+    width: 100px;
+    white-space: nowrap;
+}
+
+.lib-renew-info-value {
+    font-family: 'Lora', serif;
+    font-size: 16px;
+    color: #333;
+    text-align: left;
+    padding: 5px 10px;
+    flex: 1;
+    white-space: nowrap;
+    background: rgba(40, 167, 69, 0.1);
+    border-radius: 5px;
+}
+
+/* Ô lớn cho thông tin gia hạn thẻ */
+.lib-renewal-box {
+    background: #f9f9f9;
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    padding: 20px;
+    text-align: center;
+    transition: all 0.3s ease;
+}
+
+.lib-renewal-box:hover {
+    background: #fff;
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
+}
+
+/* Thông tin gia hạn thẻ */
+.lib-renew-subtitle {
+    font-family: 'Poppins', sans-serif;
+    font-size: 24px;
+    color: #28a745;
+    margin-bottom: 25px;
+    text-align: center;
+    position: relative;
+    padding-bottom: 15px;
+    text-transform: uppercase;
+    animation: textGlow 2s infinite alternate;
+}
+
+.lib-renew-subtitle::after {
+    content: '';
+    width: 70px;
+    height: 4px;
+    background: linear-gradient(90deg, #28a745, #218838);
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    border-radius: 2px;
+    animation: lib-renew-pulse 2s infinite;
+}
+
+.lib-renewal-options {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    margin-bottom: 20px;
+    align-items: flex-start;
+}
+
+.lib-renewal-year {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    gap: 10px;
+    width: 100%;
+    transition: all 0.3s ease;
+}
+
+.lib-renewal-year:hover {
+    transform: translateX(5px);
+}
+
+.lib-renewal-year input[type="checkbox"] {
+    width: 18px;
+    height: 18px;
+    cursor: not-allowed;
+    accent-color: #28a745;
+    transition: transform 0.3s ease;
+}
+
+.lib-renewal-year label {
+    font-family: 'Lora', serif;
+    font-size: 16px;
+    color: #333;
+    width: 200px;
+    text-align: left;
+    white-space: nowrap;
+}
+
+/* Style cho checkbox khi disabled */
+.lib-renewal-year input[type="checkbox"][disabled] {
+    background-color: #ccc;
+    border-color: #999;
+    cursor: not-allowed;
+}
+
+.lib-renewal-year input[type="checkbox"][disabled] + label {
+    color: #999;
+}
+
+/* Lưu ý */
+.lib-renewal-note {
+    font-family: 'Poppins', sans-serif;
+    font-size: 14px;
+    color: #dc3545;
+    margin-top: 10px;
+    text-align: left;
+    animation: fadeIn 1.5s ease-in-out;
+}
+
+/* Phí gia hạn */
+.lib-renewal-fee {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    gap: 10px;
+    margin-top: 20px;
+    flex-wrap: nowrap;
+    transition: all 0.3s ease;
+}
+
+.lib-renewal-fee:hover {
+    transform: translateX(5px);
+}
+
+.lib-renewal-fee .lib-renew-info-label {
+    margin-right: 20px;
+    margin-bottom: 0;
+    width: 130px;
+    text-align: right;
+    white-space: nowrap;
+}
+
+.lib-renewal-fee .lib-renew-info-value {
+    font-size: 16px;
+    color: #333;
+    text-align: left;
+    white-space: nowrap;
+    background: rgba(40, 167, 69, 0.1);
+    padding: 5px 10px;
+    border-radius: 5px;
+}
+
+/* Định dạng nút THANH TOÁN */
+.lib-renew-next-button {
+    background: #cccccc;
+    color: #666;
+    border: none;
+    padding: 12px 40px;
+    border-radius: 8px;
+    font-family: 'Poppins', sans-serif;
+    font-size: 16px;
+    font-weight: 500;
+    cursor: not-allowed;
+    display: block;
+    margin: 30px auto 0;
+    transition: all 0.4s ease;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    text-transform: uppercase;
+}
+
+.lib-renew-next-button:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+}
+
+/* Responsive Adjustments */
+@media (max-width: 768px) {
+    .lib-renew-main-section { padding: 40px 0 80px; }
+    .lib-renew-main-wrapper { max-width: 100%; padding: 0 20px; }
+    .lib-renew-content-section { padding: 30px; }
+    .lib-renew-section-title, .lib-renew-subtitle { font-size: 20px; }
+    .lib-renew-card-grid { grid-template-columns: 120px minmax(90px, 1fr) minmax(90px, 1fr); gap: 15px; }
+    .lib-renew-info-label { font-size: 14px; width: 90px; }
+    .lib-renew-info-value { font-size: 15px; }
+    .lib-renewal-year label { font-size: 15px; width: 180px; }
+    .lib-renewal-note { font-size: 13px; }
+    .lib-renewal-fee .lib-renew-info-label { width: 110px; }
+    .lib-renew-next-button { padding: 10px 30px; font-size: 15px; }
+}
+
+@media (max-width: 522px) {
+    .lib-renew-main-section { padding: 30px 0 60px; }
+    .lib-renew-main-wrapper { padding: 0 15px; }
+    .lib-renew-content-section { padding: 20px; }
+    .lib-renew-section-title, .lib-renew-subtitle { font-size: 18px; }
+    .lib-renew-card-grid { grid-template-columns: 100px minmax(80px, 1fr) minmax(80px, 1fr); gap: 10px; }
+    .lib-renew-info-label { font-size: 13px; width: 80px; }
+    .lib-renew-info-value { font-size: 14px; }
+    .lib-renewal-year label { font-size: 14px; width: 160px; }
+    .lib-renewal-note { font-size: 12px; }
+    .lib-renewal-fee { flex-direction: column; align-items: flex-start; }
+    .lib-renewal-fee .lib-renew-info-label { width: auto; margin-right: 0; margin-bottom: 5px; }
+    .lib-renewal-fee .lib-renew-info-value { margin-left: 10px; }
+    .lib-renew-next-button { padding: 8px 25px; font-size: 14px; }
+}
+
+@media (max-width: 443px) {
+    .lib-renew-info-label { white-space: normal; width: 70px; font-size: 12px; }
+    .lib-renew-info-value { white-space: normal; font-size: 13px; }
+    .lib-renewal-year label { white-space: normal; width: 140px; font-size: 13px; }
+    .lib-renewal-fee .lib-renew-info-label { white-space: normal; font-size: 12px; }
+    .lib-renewal-fee .lib-renew-info-value { white-space: normal; font-size: 13px; }
+    .lib-renewal-note { font-size: 11px; }
+    .lib-renew-next-button { padding: 6px 20px; font-size: 13px; }
+}
+
+@media (max-width: 400px) {
+    .lib-renew-card-grid { grid-template-columns: 90px minmax(70px, 1fr) minmax(70px, 1fr); }
+    .lib-renew-info-label { width: 60px; }
+    .lib-renewal-year label { width: 120px; }
+    .lib-renew-next-button { padding: 6px 20px; font-size: 13px; }
+}
+
+@media (max-width: 320px) {
+    .lib-renew-card-grid { grid-template-columns: 80px minmax(60px, 1fr) minmax(60px, 1fr); }
+    .lib-renew-info-label { font-size: 11px; width: 50px; }
+    .lib-renew-info-value { font-size: 12px; }
+    .lib-renewal-year label { font-size: 12px; width: 100px; }
+    .lib-renewal-note { font-size: 10px; }
+    .lib-renewal-fee .lib-renew-info-label { font-size: 11px; }
+    .lib-renew-next-button { padding: 5px 15px; font-size: 12px; }
+}
+
+.lib-renew-next-button:not(:disabled) {
+    background: linear-gradient(90deg, #28a745, #218838);
+    color: #fff;
+    cursor: pointer;
+}
+.lib-renew-next-button:not(:disabled):hover {
+    background: linear-gradient(90deg, #218838, #28a745);
+    transform: translateY(-5px);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+}
